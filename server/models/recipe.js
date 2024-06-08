@@ -6,7 +6,6 @@ const recipeSchema = new mongoose.Schema({
     title: {type: String, unique: true,
          required: true},
     date: {type: Date, required: true},
-    time: {type: Date, required: true},
     description: {type: String, required: true},
     userId: {type: String, required: true}
 });
@@ -17,19 +16,18 @@ const Recipe = mongoose.model("Recipe", recipeSchema);
 //4. create CRUD functions on 'Recipe' model
 
 //CREATE recipe
-async function createRecipe(title, time, description, userId) {
+async function createRecipe(title, description, userId) {
     const recipe = await getRecipe(title); 
-    if(recipe) throw Error("Recipe already exists!");   
+    if(recipe) throw Error("That recipe already exists!");   
 
     const newRecipe = await Recipe.create({
         title: title,
         date: new Date(),
-        time: time,
         description: description,
         userId: userId
     });
     
-    return newRecipe;  //new recipe created
+    return newRecipe;  //newRecipe created
 }
 
 //READ recipe

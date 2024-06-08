@@ -11,4 +11,4 @@ User may create 1 or many Comments.  All Comments have exactly 1 User.
 
 
 ### This is a screenshot of the relations between the entities (ERD) in my application: 
-![alt text](./images/recipe.png)
+![alt text](./public/images/recipe.png)

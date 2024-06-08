@@ -10,7 +10,7 @@ router  //createRecipe, getAllRecipesByUser, updateRecipe, deleteRecipe
     //createRecipe will use POST since we are creating a new recipe
     .post('/createRecipe', async (req, res) => {
         try {
-            const recipe = await Recipe.createRecipe(req.body.title, req.body.time, req.body.description, req.body.userId);
+            const recipe = await Recipe.createRecipe(req.body.title, req.body.description, req.body.userId);
             res.send(recipe);  //send over the recipe
         } catch (error) {
             res.status(401).send({message: error.message});
