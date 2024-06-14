@@ -7,6 +7,7 @@ const path = require('path');
 //connect the routers
 const userRoutes = require('./server/routes/user');
 const recipeRoutes = require('./server/routes/recipe');
+const commentRoutes = require('./server/routes/comments');
 
 mongoose.connect(process.env.dbURL)
   .then(console.log("DB Connected!! :)"))  //no semicolon to chain the next catch block
@@ -24,6 +25,7 @@ app.use(function (req, res, next) {
 
 app.use('/user', userRoutes);
 app.use('/recipe', recipeRoutes);
+app.use('/comments', commentRoutes);
 
 app.use(express.static(__dirname + "/public"));
 

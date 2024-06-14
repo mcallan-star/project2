@@ -53,7 +53,7 @@ async function deleteRecipe(id) {
 
 //utility function
 async function getRecipe(title) {
-    return await Recipe.findOne({"title": title});  //nased on title, returns entire recipe
+    return await Recipe.findOne({"title": title});  //based on title, returns entire recipe
 }    
 
 //export all functions we want to access in route files
