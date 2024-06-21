@@ -10,7 +10,7 @@ router
     .post('/login', async (req, res) => {
         try {
             const user = await User.login(req.body.username, req.body.password);
-            res.send({...user, password: undefined});  //send user (except the password) to client
+            res.send({...user});  //send user (except the password) to client
         } catch (error) {
             res.status(401).send({message: error.message});
         }
@@ -20,7 +20,7 @@ router
         try{
 
             const user = await User.register(req.body.username, req.body.password, req.body.email, req.body.dob); 
-            res.send({...user, password: undefined});  //we send over the user without the password   
+            res.send({...user});  //we send over the user without the password   
         }
         catch (error) {
             res.status(401).send({message: error.message});

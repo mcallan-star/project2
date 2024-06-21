@@ -1,5 +1,7 @@
 //1. import mongoose
 const mongoose = require("mongoose");
+//import bcrypt
+const bcrypt = require("bcrypt");
 
 //2. create a schema for entity
 const userSchema = new mongoose.Schema({
@@ -19,23 +21,29 @@ async function register (username, password, email, dob) {
     const user = await getUser(username); 
     if(user) throw Error("Username already exists!");  //if user already exists, throw error
 
+    const salt = await bcrypt.genSalt(10);             //generate salt for password hashing (10 rounds) 
+    const hashed = await bcrypt.hash(password, salt);  //'password' + salt
+
     const newUser = await User.create({
         username: username,
-        password: password,
+        password: hashed,                           //hashed password stored in database
         email: email,
         dob: dob
     });
     
-    return newUser;  //new user created
+    return newUser._doc;                            //new user created
 }
 
 //READ user
 async function login (username, password)  {
     const user = await getUser(username);
     if(!user) throw Error("User not found");
-    if(user.password != password) throw Error(":O Phooey! Incorrect Password, try again!!");
+    //if(user.password != password) throw Error(":O Phooey! Incorrect Password, try again!!");
 
-    return user;  //the specific username and password passed through can be returned to the client (grabbed from the client side)
+    const isMatched = await bcrypt.compare(password, user.password);        //compare the password entered by user with the hashed password in database
+    if(!isMatched) throw Error("Wrong Password Entered. Try that again.");
+
+    return user._doc;                                                       //return the user object
 }
 
 //UPDATE user
