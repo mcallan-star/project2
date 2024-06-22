@@ -19,10 +19,14 @@ jobs:
         node-version: '20'  # Set this to the Node.js version you are using
 
     - name: Install Dependencies
-      run: npm install
+      run: |
+      cd client
+      npm install
 
     - name: Build
-      run: npm run build
+      run: |
+      cd client
+      npm run build
 
     - name: Deploy to GitHub Pages
       uses: JamesIves/github-pages-deploy-action@v4
