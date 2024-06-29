@@ -19,7 +19,7 @@ router
     .post('/register', async (req, res) => {
         try{
 
-            const user = await User.register(req.body.username, req.body.password, req.body.email, req.body.dob); 
+            const user = await User.register(req.body.username, req.body.password, req.body.email); 
             res.send({...user});  //we send over the user without the password   
         }
         catch (error) {

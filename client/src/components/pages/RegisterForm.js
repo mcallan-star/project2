@@ -1,6 +1,10 @@
+import React from "react";
 import { fetchData } from "../../main"; 
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+
 const RegisterForm = () => {
+    const navigate = useNavigate();  //useNavigate is a hook that allows us to navigate to different pages in our app
     const [user, setUser] = useState({
         email: '',
         username: '',
@@ -23,7 +27,6 @@ const RegisterForm = () => {
             console.log(password1, password2)
         }
 
-        console.log(user);
 
         fetchData('/user/register',    //sends data from client to server
             {
@@ -37,6 +40,7 @@ const RegisterForm = () => {
             .then((data) => {
                 if(!data.message) {
                     console.log(data);
+                    navigate('/Foods')
                 }
             })
             .catch((error) => {
@@ -94,6 +98,9 @@ const RegisterForm = () => {
                 value={username}  
                 required
                 />
+            </div>
+            <div>
+                username: {username}
             </div>
             <div className="mb-3 p-2 rounded bg-warning">
                 <label htmlFor="exampleInputPassword1" className="form-label">Password</label>

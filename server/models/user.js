@@ -7,8 +7,7 @@ const bcrypt = require("bcrypt");
 const userSchema = new mongoose.Schema({
     username: {type: String, unique: true, required: true},
     password: {type: String, required: true},
-    email: {type: String, required: true},
-    dob: {type: Date},
+    email: {type: String, required: true}
 });
 
 //create model of schema
@@ -17,9 +16,9 @@ const User = mongoose.model("User", userSchema);
 //4. create CRUD functions on 'User' model
 
 //CREATE user
-async function register (username, password, email, dob) {
+async function register (username, password, email) {
     const user = await getUser(username); 
-    if(user) throw Error("Username already exists!");  //if user already exists, throw error
+    if(user) throw Error("Username already exists! Pick a new one. ");  //if user already exists, throw error
 
     const salt = await bcrypt.genSalt(10);             //generate salt for password hashing (10 rounds) 
     const hashed = await bcrypt.hash(password, salt);  //'password' + salt
@@ -27,8 +26,7 @@ async function register (username, password, email, dob) {
     const newUser = await User.create({
         username: username,
         password: hashed,                           //hashed password stored in database
-        email: email,
-        dob: dob
+        email: email
     });
     
     return newUser._doc;                            //new user created
