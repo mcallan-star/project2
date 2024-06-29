@@ -1,9 +1,10 @@
+import { Outlet, Link } from 'react-router-dom';
 const Navbar = () => {
     return (
         <div>
             <nav className="navbar navbar-expand-lg navbar-light bg-light">
                 <div className="container-fluid">
-                    <a className="navbar-brand" href="#">Food App</a>
+                    <Link className="navbar-brand" to="/">Food App</Link>
 
                     <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                         <span className="navbar-toggler-icon"></span>
@@ -12,23 +13,26 @@ const Navbar = () => {
                     <div className="collapse navbar-collapse" id="navbarSupportedContent">
                         <ul className="navbar-nav me-auto mb-2 mb-lg-0">
                         <li className="nav-item">
-                                <a className="nav-link" href="#">My Profile</a>
+                                <Link className="nav-link" to="/foods">My Profile</Link>
                             </li>
                             <li className="nav-item">
-                                <a className="nav-link" href="#">Login</a>
+                                <Link className="nav-link" to="/login">Login</Link>
                             </li>
                             <li className="nav-item">
-                                <a className="nav-link" href="#">Register</a>
+                                <Link className="nav-link" to="/register">Register</Link>
+                            </li>
+                            <li className="nav-item">
+                                <Link className="nav-link" to="/foods">Foods</Link>
                             </li>
                             <li className="nav-item dropdown">
-                                <a className="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <Link className="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                     Quick Access
-                                </a>
+                                </Link>
                                 <ul className="dropdown-menu" aria-labelledby="navbarDropdown">
-                                    <li><a className="dropdown-item" href="#">Favorites</a></li>
-                                    <li><a className="dropdown-item" href="#">Discover</a></li>
+                                    <li><Link className="dropdown-item" href="#">Favorites</Link></li>
+                                    <li><Link className="dropdown-item" href="#">Discover</Link></li>
                                     <li><hr className="dropdown-divider" /></li>  
-                                    <li><a className="dropdown-item" href="#">Settings</a></li>
+                                    <li><Link className="dropdown-item" href="#">Settings</Link></li>
                                 </ul>
                             </li>
                         </ul>
@@ -39,6 +43,8 @@ const Navbar = () => {
                     </div>
                 </div>
             </nav>
+
+                <Outlet />
         </div>
     );
 }

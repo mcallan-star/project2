@@ -1,9 +1,11 @@
+import React from 'react';   //importing React
 import './App.css';
-import Foods from './components/Foods.js';
-import About from './components/About.js';
-import Navbar from './components/Navbar.js';
-import RegisterForm from './components/RegisterForm.js';
-import LoginForm from './components/LoginForm.js';
+import Foods from './components/pages/Foods.js';
+import About from './components/pages/About.js';
+import Navbar from './components/pages/Navbar.js';
+import RegisterForm from './components/pages/RegisterForm.js';
+import LoginForm from './components/pages/LoginForm.js';
+import { BrowserRouter, Routes, Route } from "react-router-dom";      //importing components from react-router-dom
 
 const foods = [   //array sent over as a React prop
   {
@@ -48,12 +50,17 @@ const foods = [   //array sent over as a React prop
 function App() {
   return (
     <div className="App">
-      <Navbar />
-      <h1>My Favorite Foods</h1>
-      <Foods foods={foods} />  {/*passing the foods array as a React prop */}
-      <About />
-      <RegisterForm />
-      <LoginForm />
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Navbar />}>
+        <Route index element={<About />}/>
+        <Route path="foods" element={<Foods foods={foods} />}/>
+        <Route path="login" element={<LoginForm />}/>
+        <Route path="register" element={<RegisterForm />}/>
+      </Route>
+      </Routes>
+    </BrowserRouter>
+
     </div>
   );
 }
