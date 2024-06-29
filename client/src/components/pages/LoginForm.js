@@ -28,7 +28,7 @@ const LoginForm = () => {
             .then((data) => {
             if(!data.message) {   
                 console.log(data);
-                navigate('/Foods')  
+                navigate('/Foods', {state: {user: data}})
             }
         })
         .catch((error) => {

@@ -19,7 +19,13 @@ router  //createRecipe, getAllRecipesByUser, updateRecipe, deleteRecipe
 
     .get('/getAllRecipesByUser', async (req, res) => {
         try {
-            const recipes = await Recipe.getAllRecipesByUser(req.body.userId);
+            // get parameter from the request   
+            const userId = req.query.userId;  //get the userId from the query string      body is only on post requests
+            // A request looks like this http://localhost:3000/recipe/getAllRecipesByUser?userId=667f959718591e0fc771814c
+            // Where ?userId=667f959718591e0fc771814c is the query string
+            // Another example of query is https://www.google.com/search?q=javascript, or https://www.youtube.com/watch?v=3QOvEGzJf7U
+            // bad use of query: https://www.mysite.com/user/login?username=John&password=12345 //this is bad because it's not secure. it would go in the user's history and be visible 
+            const recipes = await Recipe.getAllRecipesByUser(userId);
             res.send(recipes);  //send over the recipes to the client side 
         } catch (error) {
             res.status(401).send({message: error.message});

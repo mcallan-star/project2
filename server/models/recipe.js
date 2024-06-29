@@ -5,7 +5,7 @@ const mongoose = require("mongoose");
 const recipeSchema = new mongoose.Schema({
     title: {type: String, unique: true,
          required: true},
-    date: {type: Date, required: true},
+    date: {type: Date},
     description: {type: String, required: true},
     userId: {type: String, required: true}
 });

@@ -1,58 +1,105 @@
-const user = [
-    {
-        id: 1,
-        username: "maddog1999"
-    }
-];
-
-const foods = [
-    {
-        id: 858930,
-        title: "Garden Kale and Frozen Blueberry smoothie"
-    },
-    {
-        id: 1111,
-        title: "Shrimp Quesadillas with fresh Pico de Gallo"
-    },
-    {
-        id: 5555,
-        title: "Chicken Teriyaki with Udon Noodles"
-    },
-    {
-        id: 33333,
-        title: "Iced Caramel Latte with Almond Milk"
-    },
-    {
-        id: 22222,
-        title: "Hot Pumpkin Spice Latte with Whipped Cream"
-    },
-    {
-        id: 44444,
-        title: "Pumpkin Cinnamon scone"
-    },
-    {
-        id: 6662,
-        title: "Spicy Garden Salsa with Tortilla Chips"
-    },
-    {
-        id: 12,
-        title: "Iced Cold Brew with Lavender Cold Foam <3"
-    },
-    {
-        id: 13,
-        title: "Hot Black Coffee"
-    }
-];
+import { useLocation } from "react-router-dom";
+import { fetchData } from '../../main';
+import { useState, useEffect } from "react";
+import { useNavigate } from 'react-router-dom';
 
 const Foods = (props) => {
-    return (
-        <div className="food-container">
-            <h2>A few of {user[0].username}'s favorite foods</h2>
-            <ul>
-                {props.foods.map((food) => (
-                    <li key={food.id}>{food.title}</li>
-                ))}
-            </ul>
+    const navigate = useNavigate();
+
+    const location = useLocation();
+
+    const [title, setTitle] = useState('');
+
+    const [description, setDescription] = useState('');
+
+    const [recipes, setRecipes] = useState([]); //state to store recipes
+
+    const user = location.state?.user;
+    // ?. is optional chaining operator   
+    // example: disney.garfield?.friends?.donald  // returns undefined because garfield is not a property of disney  
+
+    if (!user) { // if we're not logged in, redirect to login page
+        navigate('/login');
+    }
+
+    useEffect(() => {
+        // Call the function to fetch recipes when component(in this case this page) mounts
+        getRecipes();
+    }, []); // Empty dependency array means this effect runs only once on mount
+
+
+    function addRecipe(e) {   //client side function to add a recipe
+        e.preventDefault();
+        console.log("Recipe added");
+        const userId = user._id;
+
+        fetchData('/recipe/createRecipe', //route's endpoint
+            {
+                title,
+                description,
+                userId
+            },
+            'POST')
+            .then((data) => {
+                if (!data.message) {
+                    console.log(data);
+                    getRecipes()
+                }
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+    }
+
+    function getRecipes() {    //client side function which uses route's endpoint
+
+        // Fetch all recipes by the user. This is a query parameter and a query on the endpoint
+        fetchData(`/recipe/getAllRecipesByUser?userId=${user?._id}`     //  ?userId=667f959718591e0fc771814c 
+            , 'GET')
+            .then((data) => {
+                if (!data.message) {
+                    console.log(data);
+                    setRecipes(data);
+                }
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+    }
+
+    return ( // return the JSX of the page, with bootstrap classes
+        <div className="container mt-5">
+            <div className="row">
+                <div className="col-md-6">
+                    <h2>{user?.username}'s CookBook</h2>
+                    <ul className="list-group">
+                        {recipes.map((recipe) => (
+                            <li key={recipe._id} className="list-group-item">
+                                {recipe.title} - {recipe.description}
+                            </li>
+                        ))}
+                    </ul>
+
+                    <h2 className="mt-4">
+                        Add a Recipe
+                    </h2>
+                    <input 
+                        type="text" 
+                        className="form-control my-2" 
+                        placeholder="Title" 
+                        value={title} 
+                        onChange={(e) => setTitle(e.target.value)} />
+                    <input 
+                        type="text"
+                        className="form-control my-2" 
+                        placeholder="Description" 
+                        value={description} 
+                        onChange={(e) => setDescription(e.target.value)} />
+                    <button className="btn btn-primary" onClick={addRecipe}>
+                        Add Your Recipe!
+                    </button>
+                </div>
+            </div>
         </div>
     );
 }
