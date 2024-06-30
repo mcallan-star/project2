@@ -1,22 +1,24 @@
 import React from "react";
 import { fetchData } from "../../main"; 
-import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useContext, useEffect } from "react";
+import UserContext from "../../context/userContext";
 
 const RegisterForm = () => {
     const navigate = useNavigate();  //useNavigate is a hook that allows us to navigate to different pages in our app
-    const [user, setUser] = useState({
-        email: '',
-        username: '',
-        fname: '',
-        lname: '',
-        password1: '',
-        password2: ''
-    });
+     const {user, updateUser, setUser} = useContext(UserContext); 
+     //= useState({
+    //     email: '',
+    //     username: '',
+    //     fname: '',
+    //     lname: '',
+    //     password1: '',
+    //     password2: ''
+    // });
 
     const {email, username, fname, lname, password1, password2} = user;                       //destructuring user object for RegisterForm
 
-    const onChange = (e) => setUser({...user,[e.target.name]: e.target.value})                //each time a user types in the input field who includes onChange, the state is updated
+    const onChange = (e) => updateUser(e.target.name, e.target.value)                //each time a user types in the input field who includes onChange, the state is updated
 
     const onSubmit = (e) => {
         e.preventDefault();         //prevents the refreshing of the page after submission (default behavior)
@@ -40,13 +42,20 @@ const RegisterForm = () => {
             .then((data) => {
                 if(!data.message) {
                     console.log(data);
-                    navigate('/Foods')
+                    setUser({...user, authenticated: true, _id: data._id});
                 }
             })
             .catch((error) => {
                 console.log(error);
             })
     }
+
+    useEffect(() => {
+        if (user._id && user.authenticated) {
+            console.log('Register successful, Logged in and redirecting to Foods page :)!!!!!!!!!!!!!!!!!!!!!');
+            navigate('/Foods');
+        }
+    }, [user, navigate]);
 
     return (
         <form onSubmit={onSubmit}>
@@ -58,7 +67,7 @@ const RegisterForm = () => {
                 id="exampleInputEmail1" 
                 name= 'email'
                 onChange = {onChange}
-                value = {email}        //value is the state of the user object at each render
+                value = {email || ''}        //value is the state of the user object at each render
                 required
                 />
                 <div id="emailHelp" className="form-text">We'll never share your email with anyone else.</div>
@@ -71,7 +80,7 @@ const RegisterForm = () => {
                 id="exampleInputFname" 
                 name="fname"
                 onChange={onChange}
-                value={fname}
+                value={fname || ''}
                 required
                 />
             </div>
@@ -83,7 +92,7 @@ const RegisterForm = () => {
                 id="exampleInputLname" 
                 name="lname" 
                 onChange={onChange}  //onChange is a function that updates the state of the user object
-                value={lname}     //value is the state of the user object
+                value={lname || ''}     //value is the state of the user object
                 required
                 />
             </div>
@@ -95,7 +104,7 @@ const RegisterForm = () => {
                 id="exampleInputUsername" 
                 name="username" 
                 onChange={onChange}
-                value={username}  
+                value={username || ''}  
                 required
                 />
             </div>
@@ -110,7 +119,7 @@ const RegisterForm = () => {
                 id="exampleInputPassword1"
                 name="password1"
                 onChange={onChange}
-                value={password1}
+                value={password1 || ''}
                 required
                  />
             </div>
@@ -122,7 +131,7 @@ const RegisterForm = () => {
                 id="exampleInputPassword2" 
                 name="password2"
                 onChange={onChange}
-                value={password2}
+                value={password2 || ''}
                 required
                 />
             </div>

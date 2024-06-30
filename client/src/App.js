@@ -6,7 +6,7 @@ import Navbar from './components/pages/Navbar.js';
 import RegisterForm from './components/pages/RegisterForm.js';
 import LoginForm from './components/pages/LoginForm.js';
 import { BrowserRouter, Routes, Route } from "react-router-dom";      //importing components from react-router-dom
-
+import { UserProvider, userProvider } from './context/userContext';   //importing userProvider from userContext.js
 const foods = [   //array sent over as a React prop
   {
     id: 858930,
@@ -50,6 +50,7 @@ const foods = [   //array sent over as a React prop
 function App() {
   return (
     <div className="App">
+    <UserProvider>
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Navbar />}>
@@ -60,6 +61,7 @@ function App() {
       </Route>
       </Routes>
     </BrowserRouter>
+    </UserProvider>
 
     </div>
   );

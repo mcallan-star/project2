@@ -1,32 +1,32 @@
 import { useLocation } from "react-router-dom";
 import { fetchData } from '../../main';
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { useNavigate } from 'react-router-dom';
+import UserContext from "../../context/userContext";
 
 const Foods = (props) => {
+
+    const { user } = useContext(UserContext)    //we are using the UserContext to get the user object
+
     const navigate = useNavigate();
 
     const location = useLocation();
 
-    const [title, setTitle] = useState('');
+    const [title, setTitle] = useState('');  //empty string for title
 
-    const [description, setDescription] = useState('');
+    const [description, setDescription] = useState('');  //empty string for description
 
     const [recipes, setRecipes] = useState([]); //state to store recipes
 
-    const user = location.state?.user;
-    // ?. is optional chaining operator   
-    // example: disney.garfield?.friends?.donald  // returns undefined because garfield is not a property of disney  
-
-    if (!user) { // if we're not logged in, redirect to login page
-        navigate('/login');
-    }
-
     useEffect(() => {
-        // Call the function to fetch recipes when component(in this case this page) mounts
-        getRecipes();
-    }, []); // Empty dependency array means this effect runs only once on mount
-
+        console.log("user changed", user);
+        if (!user._id) {
+            console.log("User not authenticated", "Redirecting to login");
+            navigate('/login');
+        } else {
+            getRecipes();
+        }
+    }, [user._id]);
 
     function addRecipe(e) {   //client side function to add a recipe
         e.preventDefault();
@@ -43,6 +43,8 @@ const Foods = (props) => {
             .then((data) => {
                 if (!data.message) {
                     console.log(data);
+                    setTitle('');
+                    setDescription('');
                     getRecipes()
                 }
             })
@@ -83,17 +85,17 @@ const Foods = (props) => {
                     <h2 className="mt-4">
                         Add a Recipe
                     </h2>
-                    <input 
-                        type="text" 
-                        className="form-control my-2" 
-                        placeholder="Title" 
-                        value={title} 
-                        onChange={(e) => setTitle(e.target.value)} />
-                    <input 
+                    <input
                         type="text"
-                        className="form-control my-2" 
-                        placeholder="Description" 
-                        value={description} 
+                        className="form-control my-2"
+                        placeholder="Title of a recipe . . . "
+                        value={title}
+                        onChange={(e) => setTitle(e.target.value)} />
+                    <input
+                        type="text"
+                        className="form-control my-2"
+                        placeholder="Write about it!"
+                        value={description}
                         onChange={(e) => setDescription(e.target.value)} />
                     <button className="btn btn-primary" onClick={addRecipe}>
                         Add Your Recipe!
