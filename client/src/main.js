@@ -16,7 +16,7 @@ export async function fetchData(route = '', data = {}, methodType = 'GET') {
     }
 
     // Sending over our data to specified route in server
-    const response = await fetch(`http://localhost:5000${route}`, fetchOptions);
+    const response = await fetch(`${route}`, fetchOptions);
 
     //dealing with response from server
     if (response.ok) {
