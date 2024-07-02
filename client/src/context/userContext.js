@@ -11,12 +11,14 @@ export function UserProvider({ children }) {
         _id: ''
     });
 
+    const logout = () => setUser({ username: '', password1: '', password2: '', authenticated: false, _id: '' });
+
     const updateUser = (name, value) => {
         setUser({ ...user, [name]: value })
     }
 
     return (
-        <UserContext.Provider value={{ user, updateUser, setUser }}>
+        <UserContext.Provider value={{ user, updateUser, setUser, logout }}>
             {children}
         </UserContext.Provider>
     )
