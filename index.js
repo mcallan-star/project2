@@ -27,9 +27,9 @@ app.use('/user', userRoutes);
 app.use('/recipe', recipeRoutes);
 app.use('/comments', commentRoutes);
 
-app.use(express.static(__dirname + "/public"));
+app.use(express.static(__dirname + "/client/build"));
 
-app.get('/', (req, res) => res.sendFile(path.join(__dirname, '/public', 'index.html')));
+app.get('/', (req, res) => res.sendFile(path.join(__dirname, '/client/build', 'index.html')));
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server is running at http://localhost:${PORT}/ !!! <3 <3 <3`));
